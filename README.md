@@ -23,15 +23,15 @@ Usage
 -----
 Client:
 ```
-~$ netcat 127.0.0.1 8888
-Hey you! 
-9
+~$ netcat 127.0.0.1 123
+abcd
+5
 ```
 Server:
 ```
-~/pytcp$ sudo python3 start_pytcp.py 
-2017-04-11 15:11:01,668 (root) Welcome to pytcp v0.1.0! Press Ctrl+C to stop the server.
-2017-04-11 15:11:01,669 (pytcp.server) Serving on 8888 port.
-2017-04-11 15:11:43,220 (pytcp.server) Accepted connection from 127.0.0.1:39670.
-2017-04-11 15:11:50,837 (pytcp.server) Received 6 bytes from 127.0.0.1:39670.
+~/pytcp$ sudo python3 start_pytcp.py -p 123 
+2017-04-11 15:15:44,739 (root) Welcome to pytcp v0.1.0! Press Ctrl+C to stop the server.
+2017-04-11 15:15:44,740 (pytcp.server) Serving on 123 port.
+2017-04-11 15:15:52,117 (pytcp.server) Accepted connection from 127.0.0.1:35586.
+2017-04-11 15:15:56,096 (pytcp.server) Received 5 bytes from 127.0.0.1:35586.
 ```
