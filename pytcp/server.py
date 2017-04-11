@@ -14,7 +14,7 @@ class TCPServer:
     def start(self):
         self._server = self._loop.run_until_complete(self._server_coro)
         serving_port = self._server.sockets[0].getsockname()[1]
-        logger.info('Serving on {} port.'.format(serving_port))
+        logger.info("Serving on {} port.".format(serving_port))
         self._loop.run_forever()
 
     def stop(self):
@@ -24,15 +24,16 @@ class TCPServer:
 
     async def handle_connection(self, reader, writer):
         peername = writer.get_extra_info('peername')
-        logger.info('Accepted connection from {}:{}.'.format(*peername))
+        logger.info("Accepted connection from {}:{}.".format(*peername))
         try:
             data = await asyncio.wait_for(reader.readline(), timeout=30.0)
             bytes_number = get_bytes_number_str(data)
             writer.write(bytes_number)
-            logger.info('Received {} bytes from {}:{}.'.format(len(data), *peername))
+            logger.info("Received {} bytes from {}:{}.".format(len(data), *peername))
         except concurrent.futures.TimeoutError:
             pass
         writer.close()
+        logger.info("Connection with {}:{} was terminated.".format(*peername))
 
 
 def get_bytes_number_str(data):
