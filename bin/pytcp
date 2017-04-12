@@ -1,35 +1,11 @@
-import logging
 import pytcp
+import logging
 
 from argparse import ArgumentParser
 from pytcp.server import TCPServer
+from pytcp.misc import tune_logging
 
 logger = logging.getLogger()
-
-
-def tune_logging(logfile):
-    root_logger = logging.getLogger()
-
-    loglevel = logging.INFO
-    root_logger.setLevel(loglevel)
-
-    default_formatter = logging.Formatter('%(asctime)-15s (%(name)s) %(message)s')
-
-    console_log = logging.StreamHandler()
-    console_log.setLevel(loglevel)
-    console_log.setFormatter(default_formatter)
-
-    file_log = logging.FileHandler(logfile)
-    file_log.setFormatter(default_formatter)
-    file_log.setLevel(loglevel)
-
-    root_logger.addHandler(file_log)
-    root_logger.addHandler(console_log)
-
-
-
-def drop_privileges(uid_name='nobody', gid_name='nogroup'):
-    pass
 
 
 if __name__ == '__main__':
