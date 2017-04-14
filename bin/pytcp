@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import pytcp
 import logging
 
@@ -11,7 +13,7 @@ logger = logging.getLogger()
 if __name__ == '__main__':
     parser = ArgumentParser(description="Simple Python 3 TCP server - pytcp.")
     parser.add_argument('-p', '--port', default=8888, help="Port to listen on", type=int)
-    parser.add_argument('-l', '--logfile', default="pytcp.log", help="The path to the logfile")
+    parser.add_argument('-l', '--logfile', default="pytcp.log.", help="The path to the logfile")
     args = parser.parse_args()
 
     tune_logging(args.logfile)
@@ -21,6 +23,6 @@ if __name__ == '__main__':
     try:
         server.start()
     except KeyboardInterrupt:
-        pass
+        pass  # Press Ctrl+C to stop the server.
     finally:
         server.stop()

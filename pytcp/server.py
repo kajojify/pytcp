@@ -16,8 +16,8 @@ class TCPServer:
     def start(self):
         self._server = self._loop.run_until_complete(self._server_coro)
         serving_port = self._server.sockets[0].getsockname()[1]
-        drop_privileges()
         logger.info("Serving on {} port.".format(serving_port))
+        drop_privileges()
         self._loop.run_forever()
 
     def stop(self):

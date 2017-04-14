@@ -4,6 +4,7 @@ import os, pwd, grp
 
 def tune_logging(logfile):
     root_logger = logging.getLogger()
+    default_logfile = "pytcp.log"
 
     loglevel = logging.INFO
     root_logger.setLevel(loglevel)
@@ -13,18 +14,24 @@ def tune_logging(logfile):
     console_log = logging.StreamHandler()
     console_log.setLevel(loglevel)
     console_log.setFormatter(default_formatter)
+    root_logger.addHandler(console_log)
 
-    file_log = logging.FileHandler(logfile)
+    try:
+        file_log = logging.FileHandler(logfile)
+    except (FileNotFoundError, IsADirectoryError) as err:
+        root_logger.error("Wrong logfile name: {}."
+                          " DEFAULT logfile is used.".format(err))
+        file_log = logging.FileHandler(default_logfile)
+    root_logger.info("Started logging to file - {}".format(file_log.baseFilename))
+
     file_log.setFormatter(default_formatter)
     file_log.setLevel(loglevel)
-
     root_logger.addHandler(file_log)
-    root_logger.addHandler(console_log)
 
 
 def drop_privileges(uid_name='nobody', gid_name='nogroup'):
     logger = logging.getLogger(__name__)
-    if os.getuid() != 0:
+    if os.getuid() != 0:  # If we're not root
         return
 
     wanted_uid = pwd.getpwnam(uid_name).pw_uid
@@ -35,7 +42,7 @@ def drop_privileges(uid_name='nobody', gid_name='nogroup'):
         os.setuid(wanted_uid)
     except OSError as err:
         logger.error("Failed to drop privileges "
-                    "to {}/{}: {}.".format(uid_name, gid_name, err))
+                     "to {}/{}: {}.".format(uid_name, gid_name, err))
         exit("Stopping...")
 
     new_uid_name = pwd.getpwuid(os.getuid()).pw_name
