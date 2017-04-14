@@ -1,10 +1,13 @@
+import pytcp
 import logging
 import os, pwd, grp
 
 
 def tune_logging(logfile):
     root_logger = logging.getLogger()
-    default_logfile = "pytcp.log"
+
+    default_logfile_name = "pytcp.log"
+    default_logfile = get_logfile_path(default_logfile_name)
 
     loglevel = logging.INFO
     root_logger.setLevel(loglevel)
@@ -27,6 +30,12 @@ def tune_logging(logfile):
     file_log.setFormatter(default_formatter)
     file_log.setLevel(loglevel)
     root_logger.addHandler(file_log)
+
+
+def get_logfile_path(logfile_name):
+    package_directory = os.path.dirname(os.path.abspath(pytcp.__file__))
+    default_logfile = os.path.join(package_directory, logfile_name)
+    return default_logfile
 
 
 def drop_privileges(uid_name='nobody', gid_name='nogroup'):
