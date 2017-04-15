@@ -1,13 +1,18 @@
 import pytcp
 import logging
-import os, pwd, grp
+import os, pwd, grp, sys
 
 
 def tune_logging(logfile):
+    """
+
+    :param logfile:
+    """
     root_logger = logging.getLogger()
 
     default_logfile_name = "pytcp.log"
-    default_logfile = get_logfile_path(default_logfile_name)
+    # setting default logfile path for possible incorrect input of logfile
+    default_logfile = get_logfile_abspath(default_logfile_name)
 
     loglevel = logging.INFO
     root_logger.setLevel(loglevel)
@@ -32,15 +37,22 @@ def tune_logging(logfile):
     root_logger.addHandler(file_log)
 
 
-def get_logfile_path(logfile_name):
+def get_logfile_abspath(logfile_name):
+    """Returns absolute path for logfile_name depending
+    on the directory, where pytcp was launched."""
     package_directory = os.path.dirname(os.path.abspath(pytcp.__file__))
     default_logfile = os.path.join(package_directory, logfile_name)
     return default_logfile
 
 
 def drop_privileges(uid_name='nobody', gid_name='nogroup'):
+    """
+
+    :param uid_name:
+    :param gid_name:
+    """
     logger = logging.getLogger(__name__)
-    if os.getuid() != 0:  # If we're not root
+    if os.getuid() != 0:  # If we aren't root
         return
 
     wanted_uid = pwd.getpwnam(uid_name).pw_uid
@@ -52,7 +64,7 @@ def drop_privileges(uid_name='nobody', gid_name='nogroup'):
     except OSError as err:
         logger.error("Failed to drop privileges "
                      "to {}/{}: {}.".format(uid_name, gid_name, err))
-        exit("Stopping...")
+        sys.exit("Stopping...")
 
     new_uid_name = pwd.getpwuid(os.getuid()).pw_name
     new_gid_name = grp.getgrgid(os.getgid()).gr_name
