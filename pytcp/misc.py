@@ -4,9 +4,11 @@ import os, pwd, grp, sys
 
 
 def tune_logging(logfile):
-    """
+    """Tunes root logger, adding specific console/file handlers.
 
-    :param logfile:
+    It also sets log format and handles exceptions, which can be raised
+    in case of incorrect input of logfile path.
+    :param logfile: the path to the file for logging.
     """
     root_logger = logging.getLogger()
 
@@ -46,10 +48,11 @@ def get_logfile_abspath(logfile_name):
 
 
 def drop_privileges(uid_name='nobody', gid_name='nogroup'):
-    """
+    """Drops privileges to selected user and group.
 
-    :param uid_name:
-    :param gid_name:
+    Handles exception in case of failure and logs the result of working.
+    :param uid_name: desired user name;
+    :param gid_name: desired group name;
     """
     logger = logging.getLogger(__name__)
     if os.getuid() != 0:  # If we aren't root

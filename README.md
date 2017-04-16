@@ -10,6 +10,10 @@ It accepts some bytes from connected client until receiving CRLF and then sends 
 
 It also shows all this information on the terminal.
 
+Requirements
+------------
+Python >= 3.5
+
 How to install
 --------------
 
@@ -50,7 +54,7 @@ By the way, you don't have to run **pytcp** as root, if you use the number of po
 
 **Client:**
 ```
-~$ netcat 127.0.0.1 123
+~$ netcat 192.168.0.104 123
 pytcp abcd
 11
 ```

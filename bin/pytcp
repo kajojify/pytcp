@@ -25,6 +25,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         pass  # Press Ctrl+C to stop the server.
     except Exception as exc:
-        logger.error("Impossible to start pytcp on {} port: {}".format(args.port, exc))
+        logger.error("An error occured running pytcp on {} port: {}".format(args.port, exc))
     finally:
         server.stop()

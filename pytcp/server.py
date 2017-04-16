@@ -8,17 +8,15 @@ logger = logging.getLogger(__name__)
 
 
 class TCPServer:
-
-    """
-
-    """
+    """Implements TCP echo-like server logic."""
 
     def __init__(self, host, port, loop=None):
-        """
+        """Initialize event loop for our server. Declares a socket server,
+        with a coroutine function (method) for each client connected.
 
-        :param host:
-        :param port:
-        :param loop:
+        :param host: string, which defines the host to bind.
+        :param port: int number, which defines the port to bind.
+        :param loop: specific event loop if needed.
         """
         self._loop = loop or asyncio.get_event_loop()
         self._server_coro = asyncio.start_server(self._handle_connection,
@@ -46,10 +44,14 @@ class TCPServer:
             self._loop.close()
 
     async def _handle_connection(self, reader, writer):
-        """
+        """Handles each client connected.
 
-        :param reader:
-        :param writer:
+        Receives bytes from the client and sends back overall number
+        of received bytes. Timeout is set to 30 seconds, so the client must send
+        something to the server in this period. It also logs the result of its working.
+        Next args are passed automatically:
+        :param reader: StreamReader object. It's used to read data from the client.
+        :param writer: StreamWriter object. It's used to send data to the client.
         """
         peername = writer.get_extra_info('peername')
         logger.info("Accepted connection from {}:{}.".format(*peername))
