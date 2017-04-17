@@ -28,7 +28,6 @@ class TCPServer:
         serving_port = self._server.sockets[0].getsockname()[1]
         logger.info("Serving on {} port.".format(serving_port))
         drop_privileges()
-        self._loop.run_forever()
 
     def stop(self):
         """Stops pytcp server."""
@@ -40,8 +39,6 @@ class TCPServer:
             self._loop.run_until_complete(self._server.wait_closed())
         except AttributeError:
             pass
-        finally:
-            self._loop.close()
 
     async def _handle_connection(self, reader, writer):
         """Handles each client connected.
@@ -56,7 +53,8 @@ class TCPServer:
         peername = writer.get_extra_info('peername')
         logger.info("Accepted connection from {}:{}.".format(*peername))
         try:
-            data = await asyncio.wait_for(reader.readline(), timeout=30.0)
+            data = await asyncio.wait_for(reader.readline(),
+                                          timeout=30.0, loop=self._loop)
             # Number of bytes including CRLF
             bytes_number = get_bytes_number_str(data)
             writer.write(bytes_number)

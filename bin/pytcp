@@ -2,6 +2,7 @@
 
 import pytcp
 import logging
+import asyncio
 
 import argparse
 from pytcp.server import TCPServer
@@ -19,12 +20,16 @@ if __name__ == '__main__':
     tune_logging(args.logfile)
     logger.info("Welcome to pytcp v{}! Press Ctrl+C to stop the server.".format(pytcp.version))
 
-    server = TCPServer('0.0.0.0', args.port)
+    main_loop = asyncio.get_event_loop()
+
+    server = TCPServer('0.0.0.0', args.port, loop=main_loop)
     try:
         server.start()
+        main_loop.run_forever()
     except KeyboardInterrupt:
         pass  # Press Ctrl+C to stop the server.
     except Exception as exc:
         logger.error("An error occured running pytcp on {} port: {}".format(args.port, exc))
     finally:
         server.stop()
+        main_loop.close()
