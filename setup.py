@@ -10,5 +10,7 @@ setup(name='pytcp',
       long_description=open('README.md').read(),
       url='https://github.com/kajojify/pytcp',
       packages=find_packages(exclude=['*.pyc']),
+      test_suite='pytcp.tests',
+      tests_require='unittest2',
       scripts=['bin/pytcp']
       )

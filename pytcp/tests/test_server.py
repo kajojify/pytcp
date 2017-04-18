@@ -7,6 +7,7 @@ from pytcp.utils.client import tcp_client
 
 class TCPServerTests(unittest.TestCase):
     def setUp(self):
+        # Creates new event loop for each test. It isolates them from each other.
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(None)
 
