@@ -1,5 +1,6 @@
-pytcp
+pytcp [![Build Status](https://travis-ci.org/kajojify/pytcp.svg?branch=master)](https://travis-ci.org/kajojify/pytcp)
 =====
+
 About
 -----
 This is simple, echo-like, asynchronous Python 3 TCP server.
